@@ -91,6 +91,8 @@ User authentication is securely handled through Google.
 
 - **Knowledge reuse**: Summaries are injected back into the shared context, ensuring continuity across sessions and improving the quality of group outputs.
 
+- **RAG (Retrieval-Augmented Generation)**: Users can upload PDF documents, which are automatically processed and chunked. When creating new chats or chat message, the system performs semantic search across uploaded documents to find relevant content and automatically includes it as context for the AI, enabling responses that incorporate knowledge from uploaded documents without manual reference.
+
 ### [Hybrid architecture](#hybrid-architecture) Pros and Cons
 
 **Pros**
@@ -112,7 +114,7 @@ User authentication is securely handled through Google.
 - User authentication via AWS Cognito with **Google integration**.
 - Lambda functions and Redis are in **private subnet**s.
 - IAM roles follow the least privilege principle.
-- Documents in S3 are shared via presigned URLs, which are configured with an expiration time (e.g., 1 day) to limit exposure.
+- Summaries in S3 are shared via presigned URLs, which are configured with an expiration time (e.g., 1 day) to limit exposure.
 
 ### Scalability, Performance and Resiliency
 
@@ -194,12 +196,12 @@ User authentication is securely handled through Google.
 - **created_at** - Timestamp when access was granted (defaults to now()).
 - **Unique constraint** - Ensures one access chat per (chat_id, user_id) pair.
 
-**6. Documents Table**:
+**6. Summaries Table**:
 
-- **document_id** (Partition Key) - Unique identifier for each document (UUID).
-- **chat_id** - Identifier for the chat associated with the document.
+- **id** (Partition Key) - Unique identifier for each summary (UUID).
+- **chat_id** - Identifier for the chat associated with the summary.
 - **pdf_url** - URL of the pdf in S3.
-- **created_at** - Timestamp when the document was created.
+- **created_at** - Timestamp when the summary was created.
 - **saas_tenant_id** (GSI Partition Key) - Identifier for SaaS multi-tenancy.
 
 **Example of Relationships**:

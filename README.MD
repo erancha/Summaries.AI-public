@@ -46,14 +46,14 @@ The app has an hybrid architecture with a single React frontend that can be conf
 - Supports both WebSocket connections and REST API calls.
 - Serverless, event-driven compute model.
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/f68dc6e9-5d48-459c-b107-3c4f9dc09a0d/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/78f184da-16f0-4381-8ba3-137438d4f089/image.jpeg)
 
 ### Option 2: ALB + ECS on EC2
 
 - Supports only WebSocket connections.
 - Container-based compute on reserved EC2 instances.
 
-![ALB + ECS](https://lucid.app/publicSegments/view/f7379ee6-3b53-489b-8e1f-2f43578fbc50/image.jpeg)
+![ALB + ECS](https://lucid.app/publicSegments/view/d6f6a881-f5f2-48d4-a9ff-f57f351a7054/image.jpeg)
 
 ## Overview
 

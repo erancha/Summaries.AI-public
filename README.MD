@@ -93,6 +93,8 @@ User authentication is securely handled through Google.
 
 - **RAG (Retrieval-Augmented Generation)**: Users can upload PDF documents, which are automatically processed and chunked. When creating new chats or chat message, the system performs semantic search across uploaded documents to find relevant content and automatically includes it as context for the AI, enabling responses that incorporate knowledge from uploaded documents without manual reference.
 
+- **MCP (Model Context Protocol)**: Embedded two-phase tool calling system where the backend acts as both MCP client and server, enabling LLMs to discover available tools (phase 1), execute them locally, and integrate results into final responses (phase 2).
+
 ### [Hybrid architecture](#hybrid-architecture) Pros and Cons
 
 **Pros**

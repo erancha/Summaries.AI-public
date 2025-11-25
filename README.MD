@@ -46,7 +46,7 @@ The app has an hybrid architecture with a single React frontend that can be conf
 - Supports both WebSocket connections and REST API calls.
 - Serverless, event-driven compute model.
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/78f184da-16f0-4381-8ba3-137438d4f089/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/d9ba40c8-8e3a-419c-92f9-850a9ee95fba/image.jpeg)
 
 ### Option 2: ALB + ECS on EC2
 
@@ -210,3 +210,5 @@ User authentication is securely handled through Google.
 
 - A user can have multiple chats.
 - A chat can have multiple messages.
+
+test4

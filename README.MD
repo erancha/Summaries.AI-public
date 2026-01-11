@@ -23,7 +23,7 @@
 
 # Preface
 
-**Summaries.AI** is not just about auto-summaries. It's a [SaaS](#saas) application offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
+**Summaries.AI** is not just about auto-summaries. It's a [SaaS](#saas-architecture) application offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
 
 - **Team up with AI**: Multiple people chat with an LLM in the same space, asking questions, refining answers, and keeping context aligned.
 - **Turn chats into knowledge**: Every conversation naturally becomes a structured summary you can save, share, or publish.

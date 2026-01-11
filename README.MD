@@ -3,27 +3,27 @@
 <!-- toc -->
 
 - [Preface](#preface)
-- [High-Level Design (HLD)](#high-level-design-hld)
-  - [Hybrid architecture](#hybrid-architecture)
-    - [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
-    - [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
-  - [Overview](#overview)
-  - [Frontend](#frontend)
-  - [Backend](#backend)
-    - [AI Integration](#ai-integration)
-    - [Hybrid architecture](#hybrid-architecture-1)
-  - [Non-functional attributes](#non-functional-attributes)
-    - [Security](#security)
-    - [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
-    - [Deployment](#deployment)
-    - [Monitoring and Logging](#monitoring-and-logging)
-  - [Data Model](#data-model)
+  * [Overview](#overview)
+    + [SaaS Architecture](#saas-architecture)
+  * [Frontend](#frontend)
+  * [Backend](#backend)
+    + [AI Integration](#ai-integration)
+  * [Non-functional attributes](#non-functional-attributes)
+    + [Security](#security)
+    + [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
+    + [Deployment](#deployment)
+    + [Monitoring and Logging](#monitoring-and-logging)
+  * [Data Model](#data-model)
+- [Appendix: Hybrid architecture](#appendix-hybrid-architecture)
+    + [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
+    + [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
+    + [Hybrid architecture Pros and Cons](#hybrid-architecture-pros-and-cons)
 
 <!-- tocstop -->
 
 # Preface
 
-**Summaries.AI** is not just about auto-summaries. It's a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
+**Summaries.AI** is not just about auto-summaries. It's a [SaaS](#saas) application offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
 
 - **Team up with AI**: Multiple people chat with an LLM in the same space, asking questions, refining answers, and keeping context aligned.
 - **Turn chats into knowledge**: Every conversation naturally becomes a structured summary you can save, share, or publish.
@@ -35,27 +35,9 @@
 - Friends **plan a trip**, challenging the AI with different constraints, and end up with a reliable plan.
 - Students or professionals **revisit trusted, collaboratively-refined summaries** instead of digging through messy chat histories.
 
-# High-Level Design (HLD)
-
-## [Hybrid architecture](#hybrid-architecture-pros-and-cons)
-
-The app has an hybrid architecture with a single React frontend that can be configured to connect to one of two backend options at runtime:
-
-### Option 1: API Gateway + Lambda
-
-- Supports both WebSocket connections and REST API calls.
-- Serverless, event-driven compute model.
+## Overview
 
 ![API GW + Lambda](https://lucid.app/publicSegments/view/d9ba40c8-8e3a-419c-92f9-850a9ee95fba/image.jpeg)
-
-### Option 2: ALB + ECS on EC2
-
-- Supports only WebSocket connections.
-- Container-based compute on reserved EC2 instances.
-
-![ALB + ECS](https://lucid.app/publicSegments/view/d6f6a881-f5f2-48d4-a9ff-f57f351a7054/image.jpeg)
-
-## Overview
 
 Designed with scalability in mind, the application uses:
 
@@ -65,11 +47,13 @@ Designed with scalability in mind, the application uses:
 - Monitoring through AWS CloudWatch and X-Ray.
 - Real-time updates via WebSockets.
 
-Built as a SaaS solution using the Pool Model (Fully Shared), where all tenants share the same infrastructure and database with data separation through SaaS tenant unique IDs.
-
 The app features an intuitive mobile-friendly design.
 
 User authentication is securely handled through Google.
+
+### SaaS Architecture
+
+Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share the same infrastructure and database, separated by SaaS tenant unique IDs. In the current design, each user is a tenant (user-as-tenant model), meaning a tenant maps to a single user (no multi-user tenants).
 
 ## Frontend
 
@@ -94,19 +78,6 @@ User authentication is securely handled through Google.
 - **RAG (Retrieval-Augmented Generation)**: Users can upload PDF documents, which are automatically processed and chunked. When creating new chats or chat message, the system performs semantic search across uploaded documents to find relevant content and automatically includes it as context for the AI, enabling responses that incorporate knowledge from uploaded documents without manual reference.
 
 - **MCP (Model Context Protocol)**: Embedded two-phase tool calling system where the backend acts as both MCP client and server, enabling LLMs to discover available tools (phase 1), execute them locally, and integrate results into final responses (phase 2).
-
-### [Hybrid architecture](#hybrid-architecture) Pros and Cons
-
-**Pros**
-
-- **Cost optimization through resource utilization** - Maximizes ROI on existing EC2 reservations while leveraging Lambda's pay-per-request model.
-- **Operational flexibility** - Single frontend can be configured for different deployment scenarios, choosing between cost-optimized reserved instances or auto-scaling serverless infrastructure.
-- **Built-in redundancy** - WebSocket functionality can fall back between backends, providing resilience against infrastructure failures.
-
-**Cons**
-
-- **Doubled operational overhead** - Requires maintaining two separate backend infrastructures with duplicate monitoring, deployment pipelines, debugging complexity, and expertise in both serverless and container orchestration.
-- **Uneven feature support** - ECS backend only supports WebSockets traffic while API Gateway supports both WebSockets and REST, creating design limitations and less-than-ideal routing choices.
 
 ## Non-functional attributes
 
@@ -150,65 +121,39 @@ User authentication is securely handled through Google.
 
 ## Data Model
 
-**1. LLM profiles Table**:
+See: [docs/README-data-model.md](docs/README-data-model.md)
 
-- **profile_id** (PK) - Unique identifier for each profile (UUID).
-- **description** - String. Profile's description.
-- **modelId** - String. Model id (e.g. 'gpt-4.1-nano').
-- **userPrompt** - String. User prompt.
-- **systemPrompt** - String. System prompt.
-- **created_at** - Timestamp when the profile was created.
-- **updated_at** - Timestamp when the profile was last modified.
+# Appendix: Hybrid architecture
 
-**2. SaaS Tenants Table**:
+The app has an hybrid architecture with a single React frontend that can be configured to connect to one of two backend options at runtime:
 
-- **saas_tenant_id** (PK) - Identifier for SaaS multi-tenancy.
-- **name**
-- **email**
-- **phone**
-- **address**
-- **disabled** - If disabled, the role1 account is no longer active.
+This provides deployment flexibility for the same real-time WebSocket app: run on API Gateway + Lambda for serverless elasticity and simpler ops, or on ALB + ECS/EC2 to leverage reserved capacity and predictable steady-state costs.
 
-**3. Chats Table**:
+(Note: Currently only the API Gateway option supports REST endpoints).
 
-- **chat_id** (PK) - Unique identifier for each chat (UUID).
-- **llm_profile_id** (FK) - Unique identifier of the LLM profile used by ths chat (UUID).
-- **user_text** - String. User entered text.
-- **ai_text** - String. AI generated text.
-- **created_at** - Timestamp when the chat was created.
-- **updated_at** - Timestamp when the chat was last modified.
-- **saas_tenant_id** (Partition Key) - Identifier for SaaS multi-tenancy.
+### Option 1: API Gateway + Lambda
 
-**4. ChatMessagess Table**:
+- Supports both WebSocket connections and REST API calls.
+- Serverless, event-driven compute model.
 
-- **messages_id** (PK) - Unique identifier for each chat message (UUID).
-- **chat_id** - Identifier for the chat associated with the chat messages.
-- **created_at** - Date when the chat message was made.
-- **user_text** - String. Chat message's user entered text.
-- **ai_text** - String. Chat message's AI generated text.
-- **confirmed_at**: - Date of confirmation.
-- **saas_tenant_id** (Partition Key) - Identifier for SaaS multi-tenancy.
+![API GW + Lambda](https://lucid.app/publicSegments/view/d9ba40c8-8e3a-419c-92f9-850a9ee95fba/image.jpeg)
 
-**5. Chats_user_access Table**:
+### Option 2: ALB + ECS on EC2
 
-- **id** (PK) - Auto-incrementing primary key.
-- **chat_id** (FK) - References Chats(chat_id), cascades on delete.
-- **user_id** (FK) - References saas_tenants(saas_tenant_id), user who has access to the chat.
-- **shared_by_user_id** (FK) - References saas_tenants(saas_tenant_id), user who shared the chat.
-- **created_at** - Timestamp when access was granted (defaults to now()).
-- **Unique constraint** - Ensures one access chat per (chat_id, user_id) pair.
+- Supports only WebSocket connections.
+- Container-based compute on reserved EC2 instances.
 
-**6. Summaries Table**:
+![ALB + ECS](https://lucid.app/publicSegments/view/d6f6a881-f5f2-48d4-a9ff-f57f351a7054/image.jpeg)
 
-- **id** (Partition Key) - Unique identifier for each summary (UUID).
-- **chat_id** - Identifier for the chat associated with the summary.
-- **pdf_url** - URL of the pdf in S3.
-- **created_at** - Timestamp when the summary was created.
-- **saas_tenant_id** (GSI Partition Key) - Identifier for SaaS multi-tenancy.
+### Hybrid architecture Pros and Cons
 
-**Example of Relationships**:
+**Pros**
 
-- A user can have multiple chats.
-- A chat can have multiple messages.
+- **Cost optimization through resource utilization** - Maximizes ROI on existing EC2 reservations while leveraging Lambda's pay-per-request model.
+- **Operational flexibility** - Single frontend can be configured for different deployment scenarios, choosing between cost-optimized reserved instances or auto-scaling serverless infrastructure.
+- **Built-in redundancy** - WebSocket functionality can fall back between backends, providing resilience against infrastructure failures.
 
-test4
+**Cons**
+
+- **Doubled operational overhead** - Requires maintaining two separate backend infrastructures with duplicate monitoring, deployment pipelines, debugging complexity, and expertise in both serverless and container orchestration.
+- **Uneven feature support** - ECS backend only supports WebSockets traffic while API Gateway supports both WebSockets and REST, creating design limitations and less-than-ideal routing choices.

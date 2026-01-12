@@ -56,6 +56,6 @@
       <path d="M0,0 L0,6 L9,3 z" fill="#ffffff"/>
     </marker>
   </defs>
-  <line x1="420" y1="260" x2="600" y2="260" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="420" y1="390" x2="600" y2="390" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="420" y1="260" x2="600" y2="260" stroke-width="2" marker-end="url(#arrow)" style="stroke: rgb(225, 159, 159);"/>
+  <line x1="605.896" y1="393.558" x2="424.777" y2="393.558" stroke-width="2" marker-end="url(#arrow)" style="stroke: rgb(222, 154, 154);"/>
 </svg>

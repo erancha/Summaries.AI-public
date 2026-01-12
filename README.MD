@@ -55,6 +55,8 @@ User authentication is securely handled through Google.
 
 Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share the same infrastructure and database, separated by SaaS tenant unique IDs. In the current design, each user is a tenant (user-as-tenant model), meaning a tenant maps to a single user (no multi-user tenants).
 
+![SaaS Architecture](docs/SaaS.svg)
+
 ## Frontend
 
 - Single Page Application (SPA) developed with React.

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="1200" height="700" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" style="font-family: Arial, Helvetica, sans-serif; background:#0b1020" xmlns:bx="https://boxy-svg.com">
+  <text x="600" y="50" fill="#ffffff" font-size="28" text-anchor="middle" font-weight="bold" style="white-space: pre;">
+    SaaS scale requires different tools
+  </text>
+  <text x="250" y="100" fill="#c7d2fe" font-size="18" text-anchor="middle" style="white-space: pre;">
+    Application plane
+  </text>
+  <rect x="80" y="130" rx="12" ry="12" width="340" height="360" fill="#0f172a" stroke="#6366f1" stroke-width="2"/>
+  <text x="100" y="160" fill="#ffffff" font-size="16" font-weight="bold" style="white-space: pre;">
+    Tenant – VPC
+  </text>
+  <rect x="110" y="190" rx="10" ry="10" width="280" height="110" fill="#020617" stroke="#22c55e" stroke-width="2"/>
+  <text x="130" y="215" fill="#22c55e" font-size="14" font-weight="bold" style="white-space: pre;">
+    Public subnet
+  </text>
+  <text x="250" y="260" fill="#ffffff" font-size="13" text-anchor="middle" style="white-space: pre;">
+    NAT Gateway
+  </text>
+  <rect x="110" y="320" rx="10" ry="10" width="280" height="140" fill="#020617" stroke="#38bdf8" stroke-width="2"/>
+  <text x="130" y="345" fill="#38bdf8" font-size="14" font-weight="bold" style="white-space: pre;">
+    Private subnet
+  </text>
+  <text x="250" y="385" fill="#ffffff" font-size="13" text-anchor="middle" style="white-space: pre;">
+    Application Load Balancer
+  </text>
+  <text x="250" y="410" fill="#ffffff" font-size="13" text-anchor="middle" style="white-space: pre;">
+    Amazon ECS
+  </text>
+  <text x="820" y="100" fill="#c7d2fe" font-size="18" text-anchor="middle" style="white-space: pre;">
+    Control plane
+  </text>
+  <rect x="605.337" y="130" rx="12" ry="12" width="474.663" height="399.136" fill="#0f172a" stroke="#60a5fa" stroke-width="2" style=""/>
+  <rect x="650" y="150" rx="8" ry="8" width="380" height="40" fill="#2563eb"/>
+  <text x="840" y="178" fill="#ffffff" font-size="16" text-anchor="middle" style="white-space: pre;">
+    Admin console
+  </text>
+  <rect x="650" y="210" rx="8" ry="8" width="170" height="60" fill="#ec4899"/>
+  <rect x="860" y="210" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <text x="735" y="245" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Onboarding</text>
+  <text x="945" y="245" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Tier</text>
+  <rect x="650" y="290" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <rect x="860" y="290" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <text x="735" y="325" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Identity</text>
+  <text x="945" y="325" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Tenant</text>
+  <rect x="650" y="370" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <rect x="860" y="370" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <text x="735" y="405" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Metrics</text>
+  <text x="945" y="405" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Admin user</text>
+  <rect x="650" y="450" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <rect x="860" y="450" rx="8" ry="8" width="170" height="60" fill="#60a5fa"/>
+  <text x="735" y="485" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Billing</text>
+  <text x="945" y="485" fill="#ffffff" font-size="14" text-anchor="middle" style="white-space: pre;">Tenant user</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ffffff"/>
+    </marker>
+  </defs>
+  <line x1="420" y1="260" x2="600" y2="260" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="420" y1="390" x2="600" y2="390" stroke="#ffffff" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M 428.717 227.147 H 565.937 L 565.937 222.647 L 595.937 232.147 L 565.937 241.647 L 565.937 237.147 H 428.717 V 227.147 Z" bx:shape="arrow 428.717 222.647 167.22 19 10 30 0 1@715cce7f" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" transform="matrix(0.999986, -0.005319, 0.005319, 0.999986, -1.228744, 2.283659)"/>
+  <path d="M 583.482 374.797 H 710.036 L 710.036 370.297 L 740.036 379.797 L 710.036 389.297 L 710.036 384.797 H 583.482 V 374.797 Z" bx:shape="arrow 583.482 370.297 156.554 19 10 30 0 1@35f80663" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" transform="matrix(-0.999935, 0.011363, -0.011363, -0.999935, 1171.241089, 752.938843)"/>
+</svg>

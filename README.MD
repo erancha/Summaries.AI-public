@@ -37,7 +37,7 @@
 
 ## Overview
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/d9ba40c8-8e3a-419c-92f9-850a9ee95fba/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/13ed6939-8a00-423b-a1da-e85e50680b1d/image.jpeg)
 
 Designed with scalability in mind, the application uses:
 
@@ -138,7 +138,7 @@ This provides deployment flexibility for the same real-time WebSocket app: run o
 - Supports both WebSocket connections and REST API calls.
 - Serverless, event-driven compute model.
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/d9ba40c8-8e3a-419c-92f9-850a9ee95fba/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/13ed6939-8a00-423b-a1da-e85e50680b1d/image.jpeg)
 
 ### Option 2: ALB + ECS on EC2
 

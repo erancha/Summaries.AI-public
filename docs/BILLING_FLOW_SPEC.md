@@ -16,7 +16,7 @@
   * [Why No Authentication on Webhook Endpoint?](#why-no-authentication-on-webhook-endpoint)
 - [Complete Purchase Flow](#complete-purchase-flow)
 - [Detailed Flow Steps](#detailed-flow-steps)
-  * [Phase 1: Initialization (Load Packages & Balance)](#phase-1-initialization-load-packages--balance)
+  * [Phase 1: Initialization (Load Packages)](#phase-1-initialization-load-packages)
   * [Phase 2: Payment Intent Creation](#phase-2-payment-intent-creation)
   * [Phase 3: Payment Confirmation (Client-Side)](#phase-3-payment-confirmation-client-side)
   * [Phase 4: Webhook Processing (Server-Side)](#phase-4-webhook-processing-server-side)
@@ -25,21 +25,11 @@
   * [Data Protection](#data-protection)
 - [Database Schema](#database-schema)
   * [saas_tenants Table](#saas_tenants-table)
-- [Environment Variables](#environment-variables)
-  * [Lambda Environment (from CloudFormation)](#lambda-environment-from-cloudformation)
-  * [Frontend Environment (from appConfig.json)](#frontend-environment-from-appconfigjson)
+- [Frontend Environment (from appConfig.json)](#frontend-environment-from-appconfigjson)
 - [Error Handling](#error-handling)
   * [Frontend Error Handling](#frontend-error-handling)
   * [Backend Error Handling](#backend-error-handling)
   * [Webhook Failure Handling](#webhook-failure-handling)
-- [Testing Considerations](#testing-considerations)
-  * [Unit Testing](#unit-testing)
-  * [Integration Testing](#integration-testing)
-  * [Stripe Test Mode](#stripe-test-mode)
-- [Monitoring & Observability](#monitoring--observability)
-  * [CloudWatch Logs](#cloudwatch-logs)
-  * [Metrics to Track](#metrics-to-track)
-  * [Alerts to Configure](#alerts-to-configure)
 
 <!-- tocstop -->
 
@@ -266,7 +256,7 @@ sequenceDiagram
 
 ## Detailed Flow Steps
 
-### Phase 1: Initialization (Load Packages & Balance)
+### Phase 1: Initialization (Load Packages)
 
 **Files Involved:**
 
@@ -416,11 +406,11 @@ This URL must be configured in the Stripe Dashboard under "Developers > Webhooks
 
 ### Data Protection
 
-1. **Sensitive Data in Environment Variables**:
+1. **Sensitive Data in Secret Manager**.
 
-   - `STRIPE_SECRET_KEY` - marked `NoEcho: true` in CloudFormation
-   - `STRIPE_WEBHOOK_SECRET` - marked `NoEcho: true`
-   - `PG_PASSWORD` - marked `NoEcho: true`
+   - `STRIPE_PUBLISHABLE_KEY`
+   - `STRIPE_SECRET_KEY`
+   - `STRIPE_WEBHOOK_SECRET`
 
 2. **VPC Configuration**:
 
@@ -448,22 +438,7 @@ CREATE TABLE saas_tenants (
 );
 ```
 
-**Credit Management:**
-
-- Credits are stored as decimal values (e.g., 25.00 for $25)
-- Updated atomically using `credit = credit + <amount>`
-- No separate transactions table (consider adding for audit trail)
-
-## Environment Variables
-
-### Lambda Environment (from CloudFormation)
-
-```yaml
-STRIPE_SECRET_KEY: !Ref StripeSecretKey
-STRIPE_WEBHOOK_SECRET: !Ref StripeWebhookSecret
-```
-
-### Frontend Environment (from appConfig.json)
+## Frontend Environment (from appConfig.json)
 
 ```json
 {
@@ -501,69 +476,3 @@ STRIPE_WEBHOOK_SECRET: !Ref StripeWebhookSecret
 - Lambda must return `200 OK` to acknowledge receipt
 - Failed webhook processing logged but doesn't block payment
 - Consider implementing dead-letter queue for failed webhooks
-
-## Testing Considerations
-
-### Unit Testing
-
-**Test Files to Create:**
-
-- `backend/lambdas/billing/ts/billing.test.ts`
-- `frontend/src/redux/billing/billingSlice.test.ts`
-
-**Key Test Cases:**
-
-1. JWT token extraction and validation
-2. Credit package lookup
-3. Stripe customer creation/retrieval
-4. Payment intent creation
-5. Webhook signature verification
-6. Credit balance updates
-7. Error handling for all endpoints
-
-### Integration Testing
-
-**Test Scenarios:**
-
-1. End-to-end purchase flow with Stripe test mode
-2. Webhook delivery and processing
-3. Concurrent credit updates (race conditions)
-4. Failed payment handling
-5. Invalid JWT token rejection
-
-### Stripe Test Mode
-
-- Use Stripe test API keys for development
-- Test card numbers: `4242 4242 4242 4242` (success)
-- Test webhook events using Stripe CLI: `stripe trigger payment_intent.succeeded`
-
-## Monitoring & Observability
-
-### CloudWatch Logs
-
-**Log Groups:**
-
-- `/aws/lambda/BillingFunction-${StackName}`
-
-**Key Log Events:**
-
-- Payment intent creation
-- Webhook event processing
-- Credit balance updates
-- Error conditions
-
-### Metrics to Track
-
-1. **Payment Success Rate**: `payment_intent.succeeded` / total payment attempts
-2. **Average Purchase Amount**: Track which packages are most popular
-3. **Webhook Processing Time**: Monitor Lambda duration
-4. **Failed Payments**: Count of `payment_intent.payment_failed` events
-5. **Credit Balance Distribution**: Understand user spending patterns
-
-### Alerts to Configure
-
-1. High rate of failed payments
-2. Webhook processing failures
-3. Lambda errors or timeouts
-4. Database connection failures
-5. Stripe API rate limiting

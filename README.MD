@@ -83,7 +83,7 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 - **MCP (Model Context Protocol)**: Embedded two-phase tool calling system where the backend acts as both MCP client and server, enabling LLMs to discover available tools (phase 1), execute them locally, and integrate results into final responses (phase 2).
 
 ### Billing System
-Credit-based payment system integrated with Stripe for purchasing AI service credits. Users can buy credit packages that add funds to their account balance, which is then used to pay for LLM API calls and embeddings. See [backend/lambdas/billing/BILLING_FLOW_SPEC.md](backend/lambdas/billing/BILLING_FLOW_SPEC.md) for detailed flow documentation.
+Credit-based payment system integrated with Stripe for purchasing AI service credits. Users can buy credit packages that add funds to their account balance, which is then used to pay for LLM API calls and embeddings. See [BILLING_FLOW_SPEC.md](docs/BILLING_FLOW_SPEC.md) for detailed flow documentation.
 
 ## Non-functional attributes
 

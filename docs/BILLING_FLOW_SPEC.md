@@ -82,8 +82,8 @@ The system offers four predefined credit packages (hardcoded in `billing.ts`):
 
 | Package ID  | Name         | Price |
 | ----------- | ------------ | ----- |
-| credits_20  | $10 Credits  | $10   |
-| credits_30  | $30 Credits  | $30   |
+| credits_20  | $20 Credits  | $20   |
+| credits_60  | $60 Credits  | $60   |
 
 ## API Endpoints
 

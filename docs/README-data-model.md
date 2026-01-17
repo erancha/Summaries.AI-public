@@ -16,6 +16,9 @@ This document describes the database schema for Summaries.AI. The system uses a 
 - [DynamoDB Tables](#dynamodb-tables)
   * [1. Summaries Table](#1-summaries-table)
 - [Relationships](#relationships)
+- [Key Database Operations](#key-database-operations)
+  * [PostgreSQL Operations](#postgresql-operations)
+  * [DynamoDB Operations](#dynamodb-operations)
 
 <!-- tocstop -->
 

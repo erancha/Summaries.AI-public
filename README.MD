@@ -3,32 +3,28 @@
 <!-- toc -->
 
 - [Preface](#preface)
-  * [Overview](#overview)
-    + [SaaS Architecture](#saas-architecture)
-  * [Frontend](#frontend)
-  * [Backend](#backend)
-    + [AI Integration](#ai-integration)
-    + [Billing System](#billing-system)
-  * [Non-functional attributes](#non-functional-attributes)
-    + [Security](#security)
-    + [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
-    + [Deployment](#deployment)
-    + [Monitoring and Logging](#monitoring-and-logging)
-  * [Data Model](#data-model)
+  - [Overview](#overview)
+    - [SaaS Architecture](#saas-architecture)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+    - [AI Integration](#ai-integration)
+    - [Billing System](#billing-system)
+  - [Non-functional attributes](#non-functional-attributes)
+    - [Security](#security)
+    - [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
+    - [Deployment](#deployment)
+    - [Monitoring and Logging](#monitoring-and-logging)
+  - [Data Model](#data-model)
 - [Appendix: Hybrid architecture](#appendix-hybrid-architecture)
-    + [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
-    + [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
-    + [Hybrid architecture Pros and Cons](#hybrid-architecture-pros-and-cons)
+  - [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
+  - [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
+  - [Hybrid architecture Pros and Cons](#hybrid-architecture-pros-and-cons)
 
 <!-- tocstop -->
 
 # Preface
 
 **Summaries.AI** is not just about auto-summaries. It's a [SaaS](#saas-architecture) application offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
-
-- **Team up with AI**: Multiple people chat with an LLM in the same space, asking questions, refining answers, and keeping context aligned.
-- **Turn chats into knowledge**: Every conversation naturally becomes a structured summary you can save, share, or publish.
-- **Find ready knowledge**: Semantic search locates the most relevant summaries by meaning, not just keywords.
 
 **Use cases:**
 
@@ -83,6 +79,7 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 - **MCP (Model Context Protocol)**: Embedded two-phase tool calling system where the backend acts as both MCP client and server, enabling LLMs to discover available tools (phase 1), execute them locally, and integrate results into final responses (phase 2).
 
 ### Billing System
+
 Credit-based payment system integrated with Stripe for purchasing AI service credits. Users can buy credit packages that add funds to their account balance, which is then used to pay for LLM API calls and embeddings. See [BILLING_FLOW_SPEC.md](docs/BILLING_FLOW_SPEC.md) for detailed flow documentation.
 
 ## Non-functional attributes

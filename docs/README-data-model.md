@@ -25,6 +25,7 @@ This document describes the database schema for Summaries.AI. The system uses a 
 ## PostgreSQL Tables
 
 PostgreSQL is chosen for:
+
 - **Normalized Relations**: Junction tables like records_user_access manage many-to-many relationships between users and shared records
 - **ACID Transactions**: Multi-step operations like creating records with user access use explicit BEGIN/COMMIT/ROLLBACK transactions
 - **Foreign Key Constraints**: Cascading deletes (ON DELETE CASCADE) automatically clean up related data when users or records are deleted
@@ -80,7 +81,7 @@ Main conversation records between users and AI, representing complete chat sessi
 - **subject** - Extracted subject/title from the conversation
 - **llm_profile_id** (FK) - References llm_profiles(profile_id), nullable
 - **llm_prompt_id** (FK) - References llm_prompts(prompt_id), nullable
-- **is_public** - Whether the record is publicly accessible (boolean, default: false)
+- **group_id** (FK) - References groups(id), nullable (null = private; non-null = group chat)
 - **is_archived** - Whether the record is archived (boolean, default: false)
 - **saas_tenant_id** (FK) - References saas_tenants(saas_tenant_id), cascade delete
 - **created_at** - Record creation timestamp
@@ -136,6 +137,7 @@ Pricing configuration for different LLM models.
 ## DynamoDB Tables
 
 DynamoDB is chosen for:
+
 - **Serverless AWS integration**: Native connectivity with chat-summarizer Lambda and S3 document processing with zero database maintenance
 - **High-performance access**: Single-digit millisecond latency for summary retrieval that scales consistently
 - **Flexible schema**: NoSQL structure allows for varying summary attributes without schema migrations
@@ -151,10 +153,11 @@ Stores processed summaries of conversations for knowledge management and search.
 - **content** - Human-readable summary content
 - **summary** - LLM-optimized summary for processing
 - **direction** - Text direction ('ltr' or 'rtl', default: 'ltr')
-- **saas_tenant_id** - Tenant identifier for multi-tenancy 
+- **saas_tenant_id** - Tenant identifier for multi-tenancy
 - **created_at** - Summary creation timestamp
 
 **Global Secondary Index**: RecordCreatedIndex
+
 - Partition Key: record_id
 - Sort Key: created_at
 - Enables efficient querying of summaries by record with time-based sorting
@@ -173,6 +176,7 @@ Stores processed summaries of conversations for knowledge management and search.
 - **LLM Pricing** provides cost calculation data for **Usage Metrics** (one-to-many via model_id)
 
 **Key Design Patterns:**
+
 - **Soft Deletes**: Records use `is_archived` flag instead of hard deletion to preserve data integrity
 - **Tenant Isolation**: All major entities include `saas_tenant_id` for multi-tenant data separation
 - **Audit Trail**: Comprehensive `created_at` and `updated_at` timestamps across all entities
@@ -181,13 +185,15 @@ Stores processed summaries of conversations for knowledge management and search.
 ## Key Database Operations
 
 ### PostgreSQL Operations
+
 - **Transaction Management**: Record creation automatically includes user access entry in a single transaction
 - **Dynamic Queries**: Usage metrics support flexible filtering by tenant, profile, and date ranges
 - **Aggregation Functions**: Built-in analytics for token usage, costs, and time-based bucketing
-- **Search Optimization**: Partial indexes on `is_public` and `is_archived` for efficient filtering
+- **Search Optimization**: Partial indexes on `group_id` and `is_archived` for efficient filtering
 - **Relationship Management**: Automatic cleanup via foreign key constraints with CASCADE deletes
 
 ### DynamoDB Operations
+
 - **Batch Operations**: Efficient summary retrieval with optional limits and pagination
 - **Conditional Writes**: Summary deletion includes tenant validation for security
 - **Index Queries**: RecordCreatedIndex enables fast lookup of summaries by record with time sorting

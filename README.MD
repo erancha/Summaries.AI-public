@@ -66,6 +66,8 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 - Data is persisted in S3, PostgreSQL and DynamoDB, with Redis for improved read performance.
 - SQS queues handle WebSocket notifications asynchronously, allowing Lambda functions in private subnets to process data requests immediately without waiting for notification delivery, publish to EventBridge, and handle CloudFront cache invalidation.
 
+- Usage analytics (optional) are published to Kafka from the backend and consumed by a dedicated service that persists usage metrics in PostgreSQL.
+
 ### AI Integration
 
 - **LLM selection**: Users can choose from multiple leading LLMs (e.g., GPT, Claude, etc.), ensuring flexibility for different use cases.
@@ -81,6 +83,15 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 ### Billing System
 
 Credit-based payment system integrated with Stripe for purchasing AI service credits. Users can buy credit packages that add funds to their account balance, which is then used to pay for LLM API calls and embeddings. See [BILLING_FLOW_SPEC.md](docs/BILLING_FLOW_SPEC.md) for detailed flow documentation.
+
+Kafka-based usage metrics pipeline (optional):
+
+- The main backend publishes per-request LLM usage (tokens and cost inputs) to a Kafka topic via `kafkajs`.
+- A separate consumer service (`backend/usage-service/usageTask.js`) consumes from that topic and stores metrics in PostgreSQL for analytics/billing.
+- Configuration is controlled via environment variables (and wired in the CloudFormation templates):
+  - `KAFKA_BROKER_ENDPOINT` (if empty/unset, publishing is skipped)
+  - `KAFKA_TOPIC_NAME_USAGE_METRICS` (defaults in templates to `Summaries.AI-usage`)
+  - `KAFKA_CONSUME_FROM_BEGINNING` (consumer only; optional)
 
 ## Non-functional attributes
 
@@ -115,6 +126,8 @@ Credit-based payment system integrated with Stripe for purchasing AI service cre
 ### Monitoring and Logging
 
 - **Monitoring** and **logging** via AWS CloudWatch and X-Ray.
+
+- Optional usage metrics ingestion runs as a separate process (`usage-service`) and should be monitored independently (consumer lag, processing errors, PostgreSQL write failures).
 
 **AWS X-Ray**
 

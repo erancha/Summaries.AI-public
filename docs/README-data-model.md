@@ -5,20 +5,20 @@ This document describes the database schema for Summaries.AI. The system uses a 
 <!-- toc -->
 
 - [PostgreSQL Tables](#postgresql-tables)
-  * [1. LLM Profiles Table](#1-llm-profiles-table)
-  * [2. LLM Prompts Table](#2-llm-prompts-table)
-  * [3. SaaS Tenants Table](#3-saas-tenants-table)
-  * [4. Records Table](#4-records-table)
-  * [5. Subrecords Table](#5-subrecords-table)
-  * [6. Records User Access Table](#6-records-user-access-table)
-  * [7. Usage Metrics Table](#7-usage-metrics-table)
-  * [8. LLM Pricing Table](#8-llm-pricing-table)
+  - [1. LLM Profiles Table](#1-llm-profiles-table)
+  - [2. LLM Prompts Table](#2-llm-prompts-table)
+  - [3. SaaS Tenants Table](#3-saas-tenants-table)
+  - [4. Records Table](#4-records-table)
+  - [5. Subrecords Table](#5-subrecords-table)
+  - [6. Records User Access Table](#6-records-user-access-table)
+  - [7. Usage Metrics Table](#7-usage-metrics-table)
+  - [8. LLM Pricing Table](#8-llm-pricing-table)
 - [DynamoDB Tables](#dynamodb-tables)
-  * [1. Summaries Table](#1-summaries-table)
+  - [1. Summaries Table](#1-summaries-table)
 - [Relationships](#relationships)
 - [Key Database Operations](#key-database-operations)
-  * [PostgreSQL Operations](#postgresql-operations)
-  * [DynamoDB Operations](#dynamodb-operations)
+  - [PostgreSQL Operations](#postgresql-operations)
+  - [DynamoDB Operations](#dynamodb-operations)
 
 <!-- tocstop -->
 
@@ -81,7 +81,7 @@ Main conversation records between users and AI, representing complete chat sessi
 - **subject** - Extracted subject/title from the conversation
 - **llm_profile_id** (FK) - References llm_profiles(profile_id), nullable
 - **llm_prompt_id** (FK) - References llm_prompts(prompt_id), nullable
-- **group_id** (FK) - References groups(id), nullable (null = private; non-null = group chat)
+- **access_level** - Visibility enum (smallint): 0 = Private, 1 = Public, 2 = Restricted
 - **is_archived** - Whether the record is archived (boolean, default: false)
 - **saas_tenant_id** (FK) - References saas_tenants(saas_tenant_id), cascade delete
 - **created_at** - Record creation timestamp
@@ -189,7 +189,7 @@ Stores processed summaries of conversations for knowledge management and search.
 - **Transaction Management**: Record creation automatically includes user access entry in a single transaction
 - **Dynamic Queries**: Usage metrics support flexible filtering by tenant, profile, and date ranges
 - **Aggregation Functions**: Built-in analytics for token usage, costs, and time-based bucketing
-- **Search Optimization**: Partial indexes on `group_id` and `is_archived` for efficient filtering
+- **Search Optimization**: Partial indexes on `access_level` and `is_archived` for efficient filtering
 - **Relationship Management**: Automatic cleanup via foreign key constraints with CASCADE deletes
 
 ### DynamoDB Operations

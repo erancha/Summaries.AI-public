@@ -3,22 +3,22 @@
 <!-- toc -->
 
 - [Preface](#preface)
-  * [Overview](#overview)
-    + [SaaS Architecture](#saas-architecture)
-  * [Frontend](#frontend)
-  * [Backend](#backend)
-    + [AI Integration](#ai-integration)
-    + [Billing System](#billing-system)
-  * [Non-functional attributes](#non-functional-attributes)
-    + [Security](#security)
-    + [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
-    + [Deployment](#deployment)
-    + [Monitoring and Logging](#monitoring-and-logging)
-  * [Data Model](#data-model)
+  - [Overview](#overview)
+    - [SaaS Architecture](#saas-architecture)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+    - [AI Integration](#ai-integration)
+    - [Billing System](#billing-system)
+  - [Non-functional attributes](#non-functional-attributes)
+    - [Security](#security)
+    - [Scalability, Performance and Resiliency](#scalability-performance-and-resiliency)
+    - [Deployment](#deployment)
+    - [Monitoring and Logging](#monitoring-and-logging)
+  - [Data Model](#data-model)
 - [Appendix: Hybrid architecture](#appendix-hybrid-architecture)
-    + [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
-    + [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
-    + [Hybrid architecture Pros and Cons](#hybrid-architecture-pros-and-cons)
+  - [Option 1: API Gateway + Lambda](#option-1-api-gateway--lambda)
+  - [Option 2: ALB + ECS on EC2](#option-2-alb--ecs-on-ec2)
+  - [Hybrid architecture Pros and Cons](#hybrid-architecture-pros-and-cons)
 
 <!-- tocstop -->
 
@@ -34,7 +34,7 @@
 
 ## Overview
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/13ed6939-8a00-423b-a1da-e85e50680b1d/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/fe513a8d-a00c-4073-b9c9-d4d70db7f650/image.jpeg)
 
 Designed with scalability in mind, the application uses:
 
@@ -139,7 +139,7 @@ This provides deployment flexibility for the same real-time WebSocket app: run o
 - Supports both WebSocket connections and REST API calls.
 - Serverless, event-driven compute model.
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/13ed6939-8a00-423b-a1da-e85e50680b1d/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/fe513a8d-a00c-4073-b9c9-d4d70db7f650/image.jpeg)
 
 ### Option 2: ALB + ECS on EC2
 

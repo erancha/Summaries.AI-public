@@ -34,7 +34,7 @@
 
 ## Overview
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/46a6974f-0f49-427d-a2a6-150f848625fe/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/7c3a1194-a2f5-4bd3-8d9b-568bd080da1a/image.jpeg)
 
 Designed with scalability in mind, the application uses:
 
@@ -66,11 +66,13 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 - Data is persisted in S3, PostgreSQL and DynamoDB, with Redis for improved read performance.
 - SQS queues handle WebSocket notifications asynchronously, allowing Lambda functions in private subnets to process data requests immediately without waiting for notification delivery, publish to EventBridge, and handle CloudFront cache invalidation.
 
-- Usage analytics (optional) are published to Kafka from the backend and consumed by a dedicated service that persists usage metrics in PostgreSQL.
+- Usage analytics are published to Kafka from the backend and consumed by a dedicated service that persists usage metrics in PostgreSQL.
 
 ### AI Integration
 
 - **LLM selection**: Users can choose from multiple leading LLMs (e.g., GPT, Claude, etc.), ensuring flexibility for different use cases.
+
+- **Search (Semantic + Text)**: Chats can be searched using either **semantic search** (default; meaning-based, backed by embeddings) or **text search** (keyword-based).
 
 - **Embeddings and semantic memory**: Chat summaries are embedded and stored in **Pinecone vector DB**. This enables semantic retrieval of summaries, allowing users to locate relevant knowledge by meaning rather than keywords.
 
@@ -84,12 +86,12 @@ Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share 
 
 Credit-based payment system integrated with Stripe for purchasing AI service credits. Users can buy credit packages that add funds to their account balance, which is then used to pay for LLM API calls and embeddings. See [BILLING_FLOW_SPEC.md](docs/BILLING_FLOW_SPEC.md) for detailed flow documentation.
 
-Kafka-based usage metrics pipeline (optional):
+Kafka-based usage metrics pipeline:
 
 - The main backend publishes per-request LLM usage (tokens and cost inputs) to a Kafka topic via `kafkajs`.
 - A separate consumer service (`backend/usage-service/usageTask.js`) consumes from that topic and stores metrics in PostgreSQL for analytics/billing.
 - Configuration is controlled via environment variables (and wired in the CloudFormation templates):
-  - `KAFKA_BROKER_ENDPOINT` (if empty/unset, publishing is skipped)
+  - `KAFKA_BROKER_ENDPOINT` (required)
   - `KAFKA_TOPIC_NAME_USAGE_METRICS` (defaults in templates to `Summaries.AI-usage`)
   - `KAFKA_CONSUME_FROM_BEGINNING` (consumer only; optional)
 
@@ -118,7 +120,7 @@ Kafka-based usage metrics pipeline (optional):
 
 - **SaaS Capabilities**:
   - Multi-tenant architecture using Pool Model (Fully Shared).
-  - Self-service onboarding for role1s.
+  - Self-service onboarding for SaaS tenants.
   - Centralized cloud-based delivery.
   - Automatic updates and maintenance.
   - Note: Currently free to use (no subscription model implemented).
@@ -127,7 +129,7 @@ Kafka-based usage metrics pipeline (optional):
 
 - **Monitoring** and **logging** via AWS CloudWatch and X-Ray.
 
-- Optional usage metrics ingestion runs as a separate process (`usage-service`) and should be monitored independently (consumer lag, processing errors, PostgreSQL write failures).
+- Usage metrics ingestion runs as a separate process (`usage-service`) and should be monitored independently (consumer lag, processing errors, PostgreSQL write failures).
 
 **AWS X-Ray**
 
@@ -152,7 +154,7 @@ This provides deployment flexibility for the same real-time WebSocket app: run o
 - Supports both WebSocket connections and REST API calls.
 - Serverless, event-driven compute model.
 
-![API GW + Lambda](https://lucid.app/publicSegments/view/46a6974f-0f49-427d-a2a6-150f848625fe/image.jpeg)
+![API GW + Lambda](https://lucid.app/publicSegments/view/7c3a1194-a2f5-4bd3-8d9b-568bd080da1a/image.jpeg)
 
 ### Option 2: ALB + ECS on EC2
 

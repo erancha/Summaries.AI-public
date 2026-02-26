@@ -116,7 +116,7 @@ Kafka-based usage metrics pipeline:
 - Uses AWS SAM (Serverless Application Model) for deployment.
 - Infrastructure is defined with CloudFormation templates.
 - Deploy with a single command: `sam build` and `sam deploy`.
-- The app is available online at https://d2k7eoph8u0dj4.cloudfront.net.
+- The app is available online at https://d7cx4qnodzsdl.cloudfront.net
 
 - **SaaS Capabilities**:
   - Multi-tenant architecture using Pool Model (Fully Shared).

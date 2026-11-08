@@ -7,7 +7,7 @@ The app is available online at https://d7cx4qnodzsdl.cloudfront.net
 
 - [Preface](#preface)
   - [Overview](#overview)
-    - [SaaS Architecture](#saas-architecture)
+    - [Per-user data isolation](#per-user-data-isolation)
   - [Frontend](#frontend)
   - [Backend](#backend)
     - [AI Integration](#ai-integration)
@@ -27,7 +27,7 @@ The app is available online at https://d7cx4qnodzsdl.cloudfront.net
 
 # Preface
 
-**Summaries.AI** is not just about auto-summaries. It's a [SaaS](#saas-architecture) application offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
+**Summaries.AI** is not just about auto-summaries. It's a web app offering a shared space where people and AI think together. Multiple people chat with an AI (LLM) in a shared context, where everyone can see others’ messages and the AI’s responses in real time.
 
 **Use cases:**
 
@@ -51,11 +51,14 @@ The app features an intuitive mobile-friendly design.
 
 User authentication is securely handled through Google.
 
-### SaaS Architecture
+### Per-user data isolation
 
-Built as a SaaS solution using the Pool Model (Fully Shared): all tenants share the same infrastructure and database, separated by SaaS tenant unique IDs. In the current design, each user is a tenant (user-as-tenant model), meaning a tenant maps to a single user (no multi-user tenants).
+All users share the same infrastructure and database (the Pool Model, fully shared), and every
+item carries the owning user's tenant ID, which keeps each user's data apart. Each user is a
+tenant of their own: no organization signs up with its own admin to manage its members. That is
+why Summaries.AI is a web app with paid credits rather than SaaS.
 
-![SaaS Architecture](docs/SaaS.svg)
+![Per-user data isolation](docs/SaaS.svg)
 
 ## Frontend
 
@@ -121,12 +124,12 @@ Kafka-based usage metrics pipeline:
 - Deploy with a single command: `sam build` and `sam deploy`.
 - The app is available online at https://d7cx4qnodzsdl.cloudfront.net
 
-- **SaaS Capabilities**:
-  - Multi-tenant architecture using Pool Model (Fully Shared).
-  - Self-service onboarding for SaaS tenants.
+- **Delivery**:
+  - One shared deployment, each user's data kept apart by tenant ID.
+  - Self-service sign-up.
   - Centralized cloud-based delivery.
   - Automatic updates and maintenance.
-  - Note: Currently free to use (no subscription model implemented).
+  - Paid by credits bought through Stripe (see [Billing System](#billing-system)).
 
 ### Monitoring and Logging
 

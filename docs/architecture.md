@@ -16,7 +16,7 @@ pushes every change to the connected browsers, and REST APIs carry files, summar
 and a service-to-service RAG endpoint. Nothing on the ECS cluster answers the browser; its EC2
 host runs the Kafka broker the Lambdas publish usage to, the consumer that turns usage into
 cost, and the PostgreSQL and Redis the Lambdas read and write
-([ADR 0001](adr/0001-api-gateway-and-lambda-serve-the-app.md)).
+(ADR 0001).
 
 ![Summaries.AI on AWS](https://lucid.app/publicSegments/view/a2878ac0-1c43-42ab-ab33-088d7a03aa6f/image.jpeg)
 
@@ -105,7 +105,7 @@ the template declares, `/aws/lambda/<stack>/<logical id>`, kept for `LogRetentio
 - **Cognito** — the user pool is the shared `vsdb-cognito` stack's, with Google as the only
   identity provider; this stack adds an app client whose callbacks are the CloudFront URL and
   `http://localhost:3000` ([Sign-in](sign-in.md),
-  [ADR 0006](adr/0006-google-sign-in-through-a-shared-cognito-user-pool.md)).
+  ADR 0006).
 - **Secrets Manager secret** `/<app>/app-secrets` (`AppSecretName`) — the OpenAI, Pinecone,
   OpenWeather and Stripe keys the functions read at run time. The main stack owns it; no script
   writes it.
@@ -116,7 +116,7 @@ the template declares, `/aws/lambda/<stack>/<logical id>`, kept for `LogRetentio
   row, item, S3 key and Pinecone vector carries the owner's `saas_tenant_id`, the Cognito
   `sub`. No organization signs up with members of its own, which is why the product is a web
   app with prepaid credits rather than a SaaS with tenant administrators
-  ([ADR 0002](adr/0002-one-shared-deployment-per-user-tenants.md)).
+  (ADR 0002).
 
   ```mermaid
   graph TB
@@ -152,7 +152,7 @@ the template declares, `/aws/lambda/<stack>/<logical id>`, kept for `LogRetentio
   frontend and every backend folder that compiles them, so both sides compile one definition.
 - **LLM call.** A chat's LLM profile, a row of `llm_profiles`, names the model: a `gpt-*` id calls
   the OpenAI Chat Completions API, an `eu.anthropic.claude-*` id calls Bedrock's EU cross-region
-  inference profile ([ADR 0008](adr/0008-model-chosen-per-chat-by-llm-profile.md)). The call has two
+  inference profile (ADR 0008). The call has two
   phases: the model first sees the MCP weather tools and may ask for calls, the backend runs them,
   and the model then writes the answer with their results. Before the call the backend searches the
   tenant's RAG documents and adds the matching chunks (top 10, similarity at least 0.3) to the
@@ -179,7 +179,7 @@ the template declares, `/aws/lambda/<stack>/<logical id>`, kept for `LogRetentio
 ## Storage
 
 The relational data lives in PostgreSQL and the summaries in DynamoDB
-([ADR 0003](adr/0003-postgresql-for-relations-dynamodb-for-summaries.md)). The PostgreSQL
+(ADR 0003). The PostgreSQL
 schema is `createTables` in the `dbData` layer's `pgData.ts`, which no deployed code calls (its
 call in `dbData.ts` is commented out); `llm-catalog.sql` beside it seeds the LLM profiles and
 prices through `scripts/tools/sql-helper.sh`.
@@ -226,7 +226,7 @@ lists a chat's summaries in time order. A delete is conditional on the caller's 
 **Pinecone**: `summaries-index` (summary embeddings, for semantic search) and `documents-index`
 (RAG chunks, whose metadata `object_key` names the S3 document), 1,536 dimensions, cosine. The
 app connects to them by name and creates neither
-([ADR 0007](adr/0007-embeddings-in-pinecone.md)). `scripts/tools/rag-maintenance.sh` reconciles the
+(ADR 0007). `scripts/tools/rag-maintenance.sh` reconciles the
 documents index with S3, since nothing else records which documents exist.
 
 **Redis** holds only the cache and the connection registry, so losing it loses no data.

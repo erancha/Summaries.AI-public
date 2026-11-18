@@ -124,4 +124,4 @@ Pinecone indexes `summaries-index` and `documents-index`.
 - [Sign-in](docs/sign-in.md) — Google sign-in through the shared pool, and its setup
 - [ECS deployment](docs/ecs-deployment.md) — the usage pipeline's stacks and what its host runs
 - [Development & deployment](docs/development.md) — setup, settings, tests and the scripts
-- [Decision records](docs/adr/) — why the app is built this way, one decision per record
+- Decision records — why the app is built this way, one decision per record

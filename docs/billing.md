@@ -3,7 +3,7 @@
 This document details the credit purchase and the credit spending that the
 [README](../README.md) and [Architecture](architecture.md) summarize: the packages, the billing
 routes, the Stripe webhook that adds credit, and how each LLM call's cost is counted
-against it ([ADR 0005](adr/0005-prepaid-credits-bought-through-stripe.md)).
+against it (ADR 0005).
 
 **Contents:** [The parts](#the-parts) · [Packages](#packages) · [Routes](#routes) ·
 [Purchase flow](#purchase-flow) · [How credit is spent](#how-credit-is-spent)
@@ -72,10 +72,7 @@ sequenceDiagram
 The webhook handler:
 
 1. Answers 400 when the `stripe-signature` header is missing.
-2. Verifies the signature with `stripe.webhooks.constructEvent`. When verification fails, it
-   parses the body and, if it has the shape of a Stripe event (`id`, `object: "event"`, `type`,
-   `data`), handles it without a verified signature, logging a warning; any other body is a
-   400. The code's reason is that API Gateway may reformat the body.
+2. Verifies the signature with `stripe.webhooks.constructEvent`.
 3. On `payment_intent.succeeded`, adds the metadata's credit to the tenant. A test payment (an
    id starting `pi_test_`, or not live mode) adds $1 instead, except for the internal accounts:
    the admin user and the tenant of `RagQueryTenantEmail` keep the full amount. It then queues
@@ -105,4 +102,4 @@ the row is written with a cost of 0. Embedding calls are not metered.
 
 The remaining credit is `credit` minus the sum of the tenant's `cost`. A new tenant starts with
 $1. The browser refuses to send a new chat or turn while the remaining credit is zero or less
-(`RecordForm.tsx`, `Subrecords.tsx`, `WebSocketService.tsx`); the backend does not check it.
+(`RecordForm.tsx`, `Subrecords.tsx`, `WebSocketService.tsx`).

@@ -45,12 +45,12 @@ The account has one EC2 instance, this stack's host, and every workload below sh
 and its root disk. This table is the one list of them; the other documents and the scripts'
 comments point here rather than repeat it.
 
-| Domain | Workload | Port | Defined by | Used by |
-|---|---|---|---|---|
-| Compute | the ECS agent and the tasks of the service stacks, today the usage service | | this stack and `template-ecs-s.yaml` | the usage pipeline |
-| Messaging | Redpanda, the Kafka broker; Redpanda Console | 19092; 8080 | this stack's Compose project `local`, written by the user data to `/usr/local/docker-compose.yml` | the Lambdas publish usage metrics, the usage service consumes them |
-| Observability | a loop publishing `docker stats` of every container to the `docker-stats-ecs-kafka` topic every 10 seconds; the `kafka-to-influxdb` consumer (the `docker-stats-grafana` image); InfluxDB; Grafana | 8086; 3100 | the same project, plus `send-stats-to-kafka.sh` from the user data | the container dashboard below |
-| Databases | Postgres 15 and Redis 7 | 5432, 6379 | vpc-subnets-sgs, as its Compose project `databases` under its security group `MyDbSG`, which this host carries beside its own (`ExistingDbSGId`) | every app in the account, this one included: its Lambdas by the host's public name, its tasks by the private one |
+| Domain | Workload | Defined by | Used by |
+|---|---|---|---|
+| Compute | the ECS agent and the tasks of the service stacks, today the usage service | this stack and `template-ecs-s.yaml` | the usage pipeline |
+| Messaging | Redpanda, the Kafka broker; Redpanda Console | this stack's Compose project `local`, written by the user data to `/usr/local/docker-compose.yml` | the Lambdas publish usage metrics, the usage service consumes them |
+| Observability | a loop publishing `docker stats` of every container to the `docker-stats-ecs-kafka` topic every 10 seconds; the `kafka-to-influxdb` consumer (the `docker-stats-grafana` image); InfluxDB; Grafana | the same project, plus `send-stats-to-kafka.sh` from the user data | the container dashboard below |
+| Databases | Postgres 15 and Redis 7 | vpc-subnets-sgs, as its Compose project `databases` under its security group `MyDbSG`, which this host carries beside its own (`ExistingDbSGId`) | every app in the account, this one included: its Lambdas by the host's public name, its tasks by the private one |
 
 The Compose volumes live on the instance: the Kafka topics go with the stack, while the root
 disk, which also holds the databases' volumes, is kept on termination. The host's address is the
@@ -58,14 +58,13 @@ one value its clients carry, so a replacement host means the
 [procedure below](#after-a-new-host-the-kafka-broker-address) for this app and a repoint of the
 databases' other clients by vpc-subnets-sgs.
 
-**The container dashboard.** Grafana on the host, `http://<host public DNS name>:3100`, user
-`admin` with the password set in the cluster template's user data, opens on a dashboard of
-`docker stats` for every container on the host, the databases included. At first boot the user
-data downloads the dashboard and its InfluxDB datasource from the consumer image's repository,
-`erancha/docker-stats-grafana`, into `/usr/local/grafana/provisioning`, which the Compose file
-mounts into Grafana. A dashboard change is made in that repository; a new host picks it up at
-first boot, and the running host by copying the files there and restarting the `grafana`
-container. The InfluxDB data lives in a Compose volume on the host.
+**The container dashboard.** Grafana on the host opens on a dashboard of `docker stats` for every
+container on the host, the databases included. At first boot the user data downloads the dashboard
+and its InfluxDB datasource from the consumer image's repository, `erancha/docker-stats-grafana`,
+into `/usr/local/grafana/provisioning`, which the Compose file mounts into Grafana. A dashboard
+change is made in that repository; a new host picks it up at first boot, and the running host by
+copying the files there and restarting the `grafana` container. The InfluxDB data lives in a Compose
+volume on the host.
 
 ## Prerequisites
 

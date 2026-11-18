@@ -52,7 +52,7 @@ sequenceDiagram
    ends the Cognito session and returns to the app.
 
 The Cognito `sub` of the signed-in user is their tenant id
-([ADR 0006](adr/0006-google-sign-in-through-a-shared-cognito-user-pool.md)).
+(ADR 0006).
 
 ## Setting up Google
 

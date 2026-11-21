@@ -46,8 +46,8 @@ nothing; the production frontend ships only through `deploy.sh --frontend`.
 Every other setting is committed in `scripts/lib/stack-params.sh`, which lists every parameter
 the stack is deployed with: `sam deploy` keeps a stack's previous value for any parameter the
 overrides leave out. `AppSecretValue` is left out on purpose, since passing it empty would make
-the main stack delete the secret. The app's name (`sum`), its region and the log retention
-(14 days) are in `scripts/lib/app-env.sh`. An edit to any of them takes a `deploy.sh` run.
+the main stack delete the secret. The app's name (`sum`), its region and the log
+retention are in `scripts/lib/app-env.sh`. An edit to any of them takes a `deploy.sh` run.
 
 A bare `aws` command in your own shell has no credentials until it sources
 `scripts/lib/aws-config.sh`; the scripts source it for you. A script that loads a settings file
@@ -129,8 +129,8 @@ A deploy depends on parts no script of this repo creates:
 
 ## Logs
 
-Each function writes to `/aws/lambda/<stack>/<logical id>`, a log group the template declares
-and keeps for 14 days, so a deploy leaves the logs alone; `aws-helper.sh --delete-stack`
-deletes them with the stack.
+Each function writes to a log group the template declares, named and kept as
+[The entry points](architecture.md#the-entry-points) states, so a deploy leaves the logs alone;
+`aws-helper.sh --delete-stack` deletes them with the stack.
 `./scripts/aws-helper.sh --logs <function> --since 1d --errors` shows one function's warnings
 and errors; `--trim-logs` deletes the stack's log streams on request.

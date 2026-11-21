@@ -2,7 +2,7 @@
 
 People sign in to Summaries.AI with a Google account, through a Cognito user pool the app shares
 with the other apps of the account. This page details the sign-in behind the Cognito entry of
-[Architecture](architecture.md#the-parts): how it works, what the app adds to the shared pool
+[Architecture](architecture.md#the-entry-points): how it works, what the app adds to the shared pool
 and how to set it up in a new account, and who may sign in.
 
 ```mermaid

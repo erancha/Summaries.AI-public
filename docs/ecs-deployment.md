@@ -68,7 +68,7 @@ volume on the host.
 
 ## Prerequisites
 
-The [prerequisites of a backend deploy](development.md#prerequisites), plus:
+The [prerequisites of a backend deploy](development.md#what-must-exist-outside-the-stack), plus:
 
 - Docker and `npm` for the image build (the script starts Docker Desktop when the daemon is down).
 
